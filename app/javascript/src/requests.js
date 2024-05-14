@@ -1,21 +1,44 @@
 console.log('ajax requests');
+import $ from 'jquery';
+
 
 //tutorial follow up 
-import $ from 'jquery';
-var indexTasks = function () {
+
+
+$.ajaxSetup({
+  headers: {
+    'X-CSRF-Token': $('meta[name="csrf-token"]').attr('content')
+  }
+});
+
+export var indexTasks = function (successCB, errorCB) {
   var request = {
     type: 'GET',
     url: 'api/tasks?api_key=1',
-    success: function (response) {
-      console.log(response);
-    },
-    error: function (request, errorMsg) {
-      console.log(request, errorMsg);
-    }
+    success: successCB,
+    error: errorCB
   }
   $.ajax(request);
 };
 indexTasks();
+
+
+export var postTask = function (content, successCB, errorCB) {
+    var request = {
+      type: 'POST',
+      url: 'api/tasks?api_key=1',
+      data: {
+        task: {
+          content: content
+        }
+      },
+      success: successCB,
+      error: errorCB
+    }
+    $.ajax(request);
+  };
+  postTask('this is some task...');
+
 
 //my code
 var getAndDisplayAllTasks = function() {
@@ -76,12 +99,40 @@ var getAndDisplayAllTasks = function() {
         }
     });
 }
+
+var createTask = function() {
+    $.ajax({
+        type: 'POST',
+        url: 'https://fewd-todolist-api.onrender.com/tasks?api_key=148',
+        contentType: 'application/json',
+        dataType: 'json',
+        data: JSON.stringify({
+            task: {
+                content: $('#new-task-content').val()
+            }
+        }),
+        success: function(response, textStatus) {
+            $('#new-task-content').val('');
+            getAndDisplayAllTasks();
+        },
+        error: function(request, textStatus, errorMessage) {
+            console.log(errorMessage);
+        }
+    });
+}
+
+$('#create-task').on('submit', function(e) {
+    e.preventDefault();
+    createTask();
+});
+
 getAndDisplayAllTasks();
+
 
 var deleteTask = function(id) {
     $.ajax({
         type: 'DELETE',
-        url: 'api/tasks/' + id + '?api_key=1',
+        url: 'https://fewd-todolist-api.onrender.com/tasks/' + id + '?api_key=148',
         success: function(response, textStatus) {
             getAndDisplayAllTasks();
         },
@@ -98,7 +149,7 @@ $(document).on('click', '.delete', function() {
 var markTaskComplete = function(id) {
     $.ajax({
         type: 'PUT',
-        url: 'api/tasks/' + id + '/mark_complete?api_key=1',
+        url: 'https://fewd-todolist-api.onrender.com/tasks/' + id + '/mark_complete?api_key=148',
         dataType: 'json',
         success: function(response, textStatus) {
             getAndDisplayAllTasks();
@@ -122,7 +173,7 @@ $(document).on('change', '.mark-complete', function() {
 var markTaskActive = function(id) {
     $.ajax({
         type: 'PUT',
-        url: 'api/tasks/' + id + '/mark_active?api_key=1',
+        url: 'https://fewd-todolist-api.onrender.com/tasks/' + id + '/mark_active?api_key=148',
         dataType: 'json',
         success: function(response, textStatus) {
             getAndDisplayAllTasks();
@@ -132,5 +183,3 @@ var markTaskActive = function(id) {
         }
     });
 }
-
-
