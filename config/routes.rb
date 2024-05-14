@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  root 'static_pages#index'
   namespace :api do
     # Add routes below this line
     resources :users, only: [:create]
@@ -12,3 +13,5 @@ Rails.application.routes.draw do
     delete 'tasks/:id'                => 'tasks#destroy'
   end
 end
+
+
