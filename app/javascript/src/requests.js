@@ -40,7 +40,24 @@ export var postTask = function (content, successCB, errorCB) {
   postTask('this is some task...');
 
 
+//test code
+
+export var getAndDisplayAllTasks = function (successCB, errorCB) {
+    var request = {
+      type: 'GET',
+      url: 'api/tasks?api_key=1',
+      success: successCB,
+      error: errorCB
+    }
+    $.ajax(request);
+  };
+  getAndDisplayAllTasks();
+  
+
+
 //my code
+
+/*
 var getAndDisplayAllTasks = function() {
     $.ajax({
         type: 'GET',
@@ -99,6 +116,8 @@ var getAndDisplayAllTasks = function() {
         }
     });
 }
+*/
+
 
 var createTask = function() {
     $.ajax({
