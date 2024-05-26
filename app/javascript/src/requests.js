@@ -8,8 +8,8 @@ $.ajaxSetup({
   }
 });
 
-// Function to get and display all tasks
-export var getAndDisplayAllTasks = function() {
+// Function to get and display all tasks with an optional filter
+export var getAndDisplayAllTasks = function(filter = 'all') {
   $.ajax({
     type: 'GET',
     url: 'api/tasks?api_key=1',
@@ -17,7 +17,13 @@ export var getAndDisplayAllTasks = function() {
     success: function(response, textStatus) {
       $('#todo-list').empty();
       var filteredTasks = response.tasks.filter(function(task) {
-        return true;
+        if (filter === 'active') {
+          return !task.completed;
+        } else if (filter === 'completed') {
+          return task.completed;
+        } else {
+          return true;
+        }
       });
       filteredTasks.forEach(function(task) {
         $('#todo-list').prepend('<div class="row d-flex"><div class="p-2"><input type="checkbox" class="mark-complete" data-id="' + task.id + '"' + (task.completed ? 'checked' : '') + '></div><div class="p-2"><p class="col-xs-8">' + task.content + '</p></div><div class="ml-auto p-2"><button class="delete" data-id="' + task.id + '"><i class="fa fa-trash" aria-hidden="true"></i></button></div></div><hr>');
