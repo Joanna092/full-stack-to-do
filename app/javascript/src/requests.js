@@ -26,7 +26,22 @@ export var getAndDisplayAllTasks = function(filter = 'all') {
         }
       });
       filteredTasks.forEach(function(task) {
-        $('#todo-list').prepend('<div class="row d-flex"><div class="p-2"><input type="checkbox" class="mark-complete" data-id="' + task.id + '"' + (task.completed ? 'checked' : '') + '></div><div class="p-2"><p class="col-xs-8">' + task.content + '</p></div><div class="ml-auto p-2"><button class="delete" data-id="' + task.id + '"><i class="fa fa-trash" aria-hidden="true"></i></button></div></div><hr>');
+        $('#todo-list').prepend(`
+        <div class="row align-items-center">
+          <div class="col-auto">
+            <input type="checkbox" class="mark-complete" data-id="${task.id}" ${task.completed ? 'checked' : ''}>
+          </div>
+          <div class="col">
+            <p>${task.content}</p>
+          </div>
+          <div class="col-auto">
+            <button class="delete btn" data-id="${task.id}">
+              <i class="fa fa-trash" aria-hidden="true"></i>
+            </button>
+          </div>
+        </div>
+        <hr>
+      `);
       });
     },
     error: function(request, textStatus, errorMessage) {
